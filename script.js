@@ -353,11 +353,16 @@ function renderCertifications(certs) {
     let allCerts = [];
     
     // Helper to add org
-    const addCerts = (source, orgName) => {
-        if(source) {
-            return source.map(c => ({...c, org: orgName}));
-        }
-        return [];
+    const addCerts = (source, orgLabel) => {
+        if(!source) return [];
+        return source.map(c => {
+            let org = orgLabel;
+            if (orgLabel === 'Meta/Google') {
+                if (c.name.includes('Google')) org = 'Google';
+                else org = 'Meta';
+            }
+            return {...c, org};
+        });
     };
 
     allCerts = allCerts.concat(addCerts(certs.ibm_professional, 'IBM'));
