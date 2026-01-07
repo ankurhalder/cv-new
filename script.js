@@ -351,13 +351,22 @@ function renderCertifications(certs) {
     const list = document.getElementById('certifications-list');
     
     let allCerts = [];
-    if(certs.ibm_professional) allCerts = allCerts.concat(certs.ibm_professional);
-    if(certs.meta_google) allCerts = allCerts.concat(certs.meta_google);
-    if(certs.udemy_specialized) allCerts = allCerts.concat(certs.udemy_specialized);
+    
+    // Helper to add org
+    const addCerts = (source, orgName) => {
+        if(source) {
+            return source.map(c => ({...c, org: orgName}));
+        }
+        return [];
+    };
+
+    allCerts = allCerts.concat(addCerts(certs.ibm_professional, 'IBM'));
+    allCerts = allCerts.concat(addCerts(certs.meta_google, 'Meta/Google'));
+    allCerts = allCerts.concat(addCerts(certs.udemy_specialized, 'Udemy'));
     
     const html = allCerts.map(cert => `
        <div class="cert-item">
-          <a href="${cert.certificate_url}" target="_blank" class="cert-name">• ${cert.name}</a>
+          <a href="${cert.certificate_url}" target="_blank" class="cert-name">• ${cert.name} <span style="font-weight:400; color:#666; font-size:9px">(${cert.org})</span></a>
        </div>
     `).join('');
     
